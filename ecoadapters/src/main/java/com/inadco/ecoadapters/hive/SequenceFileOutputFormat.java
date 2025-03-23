@@ -62,7 +62,7 @@ public class SequenceFileOutputFormat<K,V> extends org.apache.hadoop.mapred.Sequ
 
     FileSystem fs = finalOutPath.getFileSystem(jc);
     final SequenceFile.Writer outStream = Utilities.createSequenceWriter(jc,
-        fs, finalOutPath, Text.class, valueClass, isCompressed);
+        fs, finalOutPath, Text.class, valueClass, isCompressed, progress);
 
     return new RecordWriter() {
       public void write(Writable r) throws IOException {

@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hive.serde2.SerDe;
+import org.apache.hadoop.hive.serde2.Deserializer;
 import org.apache.hadoop.hive.serde2.SerDeException;
 import org.apache.hadoop.hive.serde2.SerDeStats;
 import org.apache.hadoop.hive.serde2.objectinspector.ListObjectInspector;
@@ -48,7 +48,7 @@ import com.google.protobuf.Message;
 import com.inadco.ecoadapters.EcoUtil;
 
 /**
- * {@link SerDe} support for sequence files with values having
+ * {@link Deserializer} support for sequence files with values having
  * {@link BytesWritable}-serialized protobuf messages. Only deserialization is
  * supported as of this time.
  * 
@@ -117,7 +117,7 @@ import com.inadco.ecoadapters.EcoUtil;
  * @author dmitriy
  * 
  */
-public class ProtoSerDe implements SerDe {
+public class ProtoSerDe implements Deserializer {
 
     private static final Logger LOG = Logger.getLogger(ProtoSerDe.class);
 
@@ -167,10 +167,11 @@ public class ProtoSerDe implements SerDe {
         }
     }
 
-    @Override
-    public Class<? extends Writable> getSerializedClass() {
-        return BytesWritable.class;
-    }
+    // Note (mwang): serialization is not currently supported
+//    @Override
+//    public Class<? extends Writable> getSerializedClass() {
+//        return BytesWritable.class;
+//    }
 
     @Override
     public ObjectInspector getObjectInspector() throws SerDeException {
@@ -234,15 +235,16 @@ public class ProtoSerDe implements SerDe {
     	return builder;
     }
 
-    @Override
-    public Writable serialize(Object src, ObjectInspector oi)
-            throws SerDeException {
-    	
-    	StructObjectInspector soi = (StructObjectInspector)oi;
-    	List<Object> list = soi.getStructFieldsDataAsList(src);
-    	Message.Builder b = hive2protomsg(list, m_msgBuilder.clone(), m_msgDesc, soi);
-    	return new BytesWritable(b.build().toByteArray());
-    }
+    // Note (mwang): serialization is not currently supported
+//    @Override
+//    public Writable serialize(Object src, ObjectInspector oi)
+//            throws SerDeException {
+//
+//    	StructObjectInspector soi = (StructObjectInspector)oi;
+//    	List<Object> list = soi.getStructFieldsDataAsList(src);
+//    	Message.Builder b = hive2protomsg(list, m_msgBuilder.clone(), m_msgDesc, soi);
+//    	return new BytesWritable(b.build().toByteArray());
+//    }
 
     private static List<Object> protoMsg2Hive(Message msg,
             Descriptors.Descriptor desc) {
